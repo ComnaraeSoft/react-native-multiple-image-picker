@@ -53,6 +53,8 @@ android {
 repositories {
   mavenCentral()
   google()
+  jcenter()
+  maven { url "https://jitpack.io" }
 
   def found = false
   def defaultDir = null
@@ -75,7 +77,8 @@ repositories {
 
     logger.info(":${project.name}:reactNativeAndroidRoot ${defaultDir.canonicalPath}")
     found = true
-  } else {
+  }
+  else {
     def parentDir = rootProject.projectDir
 
     1.upto(5, {
@@ -126,7 +129,8 @@ dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'io.github.lucksiege:pictureselector:v2.7.3-rc08'
+  implementation 'com.github.ComnaraeSoft:PictureSelector:v2.7.3-rc09'
+  // implementation 'io.github.lucksiege:pictureselector:v2.7.3-rc08'
   implementation 'com.github.bumptech.glide:glide:4.12.0'
   annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 }

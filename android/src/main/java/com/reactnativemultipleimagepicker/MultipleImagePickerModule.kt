@@ -81,8 +81,6 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) :
             )
         }
 
-        val startTimeIs = System.currentTimeMillis()
-
         PictureSelector.create(activity)
             .openGallery(if (mediaType == "video") PictureMimeType.ofVideo() else if (mediaType == "image") PictureMimeType.ofImage() else PictureMimeType.ofAll())
             .loadImageEngine(GlideEngine.createGlideEngine())
@@ -105,6 +103,7 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) :
             .selectionMode(if (singleSelectedMode) PictureConfig.SINGLE else PictureConfig.MULTIPLE)
             .forResult(object : OnResultCallbackListener<LocalMedia?> {
                 override fun onResult(result: MutableList<LocalMedia?>?) {
+                    val startTimeIs = System.currentTimeMillis()
                     val localMedia: WritableArray = WritableNativeArray()
                     if (result?.size == 0) {
                         promise.resolve(localMedia)
@@ -121,9 +120,9 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) :
                         }
                     }
                     val endTimeIs = System.currentTimeMillis()
-
-                    Log.d("START IS ", startTimeIs.toString())
-                    Log.d("END IS ", endTimeIs.toString())
+                    val durationMap: WritableMap = WritableNativeMap()
+                    durationMap.putString("DurationMilliSecond", (endTimeIs - startTimeIs).toString())
+                    localMedia.pushMap(durationMap)
 
                     promise.resolve(localMedia)
                 }

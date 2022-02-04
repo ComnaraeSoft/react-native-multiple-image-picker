@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaMetadataRetriever
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.facebook.react.bridge.*
 import com.luck.picture.lib.PictureSelector
@@ -80,6 +81,8 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) :
             )
         }
 
+        val startTimeIs = System.currentTimeMillis()
+
         PictureSelector.create(activity)
             .openGallery(if (mediaType == "video") PictureMimeType.ofVideo() else if (mediaType == "image") PictureMimeType.ofImage() else PictureMimeType.ofAll())
             .loadImageEngine(GlideEngine.createGlideEngine())
@@ -117,6 +120,11 @@ class MultipleImagePickerModule(reactContext: ReactApplicationContext) :
                             localMedia.pushMap(media)
                         }
                     }
+                    val endTimeIs = System.currentTimeMillis()
+
+                    Log.d("START IS ", startTimeIs.toString())
+                    Log.d("END IS ", endTimeIs.toString())
+
                     promise.resolve(localMedia)
                 }
 

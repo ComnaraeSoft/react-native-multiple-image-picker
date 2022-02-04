@@ -142,7 +142,8 @@ class MultipleImagePicker: NSObject, TLPhotosPickerViewControllerDelegate,UINavi
         }
     }
     
-    func createAttachmentResponse(filePath: String?, withFilename filename: String?, withType type: String?, withAsset asset: PHAsset, withTLAsset TLAsset: TLPHAsset ) -> [AnyHashable :Any]? {
+    func createAttachmentResponse(filePath: String?, withFilename filename: String?, withType type: String?, withAsset asset: PHAsset, withTLAsset TLAsset: TLPHAsset, moduleStartTime: Double ) -> [AnyHashable :Any]? {
+        let moduleEndTime = CACurrentMediaTime();
         var media = [
             "path": filePath! as String,
             "localIdentifier": asset.localIdentifier,
@@ -152,6 +153,7 @@ class MultipleImagePicker: NSObject, TLPhotosPickerViewControllerDelegate,UINavi
             "mime": type!,
             "creationDate": asset.creationDate!,
             "type": asset.mediaType == .video ? "video" : "image",
+            "moduleDuration": (moduleEndTime-moduleStartTime),
         ] as [String : Any]
         
         //option in video
@@ -230,6 +232,7 @@ class MultipleImagePicker: NSObject, TLPhotosPickerViewControllerDelegate,UINavi
     }
     
     func dismissPhotoPicker(withTLPHAssets: [TLPHAsset]) {
+        let moduleStartTimeIs = CACurrentMediaTime();
         if(withTLPHAssets.count == 0){
             self.resolve([]);
             dismissComplete()
@@ -287,7 +290,8 @@ class MultipleImagePicker: NSObject, TLPhotosPickerViewControllerDelegate,UINavi
                         withFilename:TLAsset.originalFileName,
                         withType: fileType,
                         withAsset: asset!,
-                        withTLAsset: TLAsset
+                        withTLAsset: TLAsset,
+                        moduleStartTime: moduleStartTimeIs
                     )!);
                     
                     selections[index] = object as Any;
